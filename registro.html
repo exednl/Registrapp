@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Registro Docente</title>
+</head>
+<body>
+    <div class="form">
+        <div>
+            <img src="img/asignaturas.png" alt="Asignaturas">
+        </div>
+        <h2 class="form__title">Registro Docente</h2>
+        <form id="registrationForm" class="form__container">
+            <div class="form__group">
+                <input type="text" id="usuario" class="form__input" placeholder=" " autocomplete="off" required>
+                <label for="usuario" class="form__label">Usuario:</label>
+                <span class="form__line"></span>
+            </div>
+            <div class="form__group">
+                <input type="email" id="email" class="form__input" placeholder=" " autocomplete="off" required>
+                <label for="email" class="form__label">Email:</label>
+                <span class="form__line"></span>
+            </div>
+            <div class="form__group">
+                <input type="password" id="password" class="form__input" placeholder=" " required>
+                <label for="password" class="form__label">Contraseña:</label>
+                <span class="form__line"></span>
+            </div>
+            <div class="form__group">
+                <input type="email" id="email1" class="form__input" placeholder=" " autocomplete="off" required>
+                <label for="email1" class="form__label">Email Personal:</label>
+                <span class="form__line"></span>
+            </div>
+            <div class="form__group">
+                <input type="tel" id="phone" class="form__input" placeholder=" " autocomplete="off">
+                <label for="phone" class="form__label">Telefono Personal:</label>
+                <span class="form__line"></span>
+            </div>
+            
+            <p class="form__paragraph">¿Ya tienes una cuenta? <a href="login.html" class="form__link">Inicia sesión aquí</a></p>
+            <br><br>
+            <input type="submit" id="signUp" class="form__submit" value="Registrarse">
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, set, ref, update, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+      
+        const firebaseConfig = {
+            apiKey: "AIzaSyB67XMBnKbUSZUz-2UKFOjW-hc36Cc7YpA",
+            authDomain: "registrapp-3ea1b.firebaseapp.com",
+            databaseURL: "https://registrapp-3ea1b-default-rtdb.firebaseio.com",
+            projectId: "registrapp-3ea1b",
+            storageBucket: "registrapp-3ea1b.appspot.com",
+            messagingSenderId: "924476188769",
+            appId: "1:924476188769:web:5b499bf3316d4188dbe220"
+        };
+  
+      
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        const registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const usuario = document.getElementById('usuario').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const email1 = document.getElementById('email1').value;
+            const phone = document.getElementById('phone').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                await update(ref(database, 'users/' + user.uid), {
+                    usuario,
+                    email,
+                    password,
+                    email_personal: email1,
+                    phone,
+                });
+
+                await sendEmailVerification(user);
+
+                alert('Por favor, verifica tu correo electrónico.');
+
+                document.getElementById('registrationForm').reset();
+                window.location.href = "login.html";
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            }
+        });
+    </script>
+</body>
+</html>

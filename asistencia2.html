@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/asistencia.css ">
+
+    <!-- Agrega la referencia a qrcode.js -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+    <title>Generar Código QR</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Generar Código QR</h1>
+
+        <form id="generateQRForm">
+            <label for="asignatura">Asignatura:</label>
+            <select id="asignatura" name="asignatura" required></select>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
+
+            <label for="sala">Sala de Clases:</label>
+            <input type="text" id="sala" name="sala" required>
+
+            <button type="button" id="generateQR">Generar QR</button>
+        </form>
+
+        <!-- Agrega un contenedor para mostrar el código QR -->
+        <div id="qrcode"></div>
+
+        <!-- Botón para confirmar asistencia y redirigir al perfil -->
+        <button type="button" id="confirmAttendance">Confirmar Asistencia</button>
+    </div>
+
+    <script type="module">
+        // Importar solo lo necesario de Firebase
+        import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB67XMBnKbUSZUz-2UKFOjW-hc36Cc7YpA",
+            authDomain: "registrapp-3ea1b.firebaseapp.com",
+            databaseURL: "https://registrapp-3ea1b-default-rtdb.firebaseio.com",
+            projectId: "registrapp-3ea1b",
+            storageBucket: "registrapp-3ea1b.appspot.com",
+            messagingSenderId: "924476188769",
+            appId: "1:924476188769:web:5b499bf3316d4188dbe220"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore();
+        const auth = getAuth();
+
+        // Obtener la lista de asignaturas de la colección "users"
+        const asignaturaSelect = document.getElementById("asignatura");
+        const usersCollection = collection(db, "users");
+
+        // Realizar la consulta a Firestore
+        const getAsignaturas = async () => {
+            const querySnapshot = await getDocs(usersCollection);
+            querySnapshot.forEach((doc) => {
+                const option = document.createElement("option");
+                option.value = doc.data().Asignatura2; // Ajusta según el nombre del campo en tu base de datos
+                option.text = doc.data().Asignatura2; // Ajusta según el nombre del campo en tu base de datos
+                asignaturaSelect.add(option);
+            });
+        };
+
+        // Llamar a la función para obtener las asignaturas
+        getAsignaturas();
+
+        // Variables para almacenar la información del código QR
+        let qrContent = "";
+
+        document.getElementById("generateQR").addEventListener("click", function() {
+            const asignatura = asignaturaSelect.value;
+            const fecha = document.getElementById("fecha").value;
+            const hora = document.getElementById("hora").value;
+            const sala = document.getElementById("sala").value;
+
+            // Combinar la información en una sola cadena
+            qrContent = `Asignatura: ${asignatura}\nFecha: ${fecha}\nHora: ${hora}\nSala: ${sala}`;
+
+            // Limpiar el contenedor anterior
+            document.getElementById("qrcode").innerHTML = "";
+
+            // Crear el código QR con la información completa
+            const qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: qrContent,
+                width: 256, // Ajusta este valor según tus necesidades
+                height: 256 // Ajusta este valor según tus necesidades
+            });
+        });
+
+        // Función para confirmar asistencia y redirigir al perfil
+        const confirmAttendance = async () => {
+            try {
+                // Agregar la información a la colección "asistencias" en Firebase
+                const docRef = await addDoc(collection(db, "asistencias"), {
+                    info: qrContent,
+                    timestamp: serverTimestamp()
+                });
+
+                console.log("Asistencia confirmada con ID: ", docRef.id);
+
+                // Redirigir al perfil después de confirmar la asistencia (ajusta la URL según tus necesidades)
+                window.location.href = "perfil.html";
+            } catch (error) {
+                console.error("Error al confirmar la asistencia: ", error);
+            }
+        };
+
+        // Escucha del evento click en el botón "Confirmar Asistencia"
+        document.getElementById("confirmAttendance").addEventListener("click", function() {
+            confirmAttendance();
+        });
+
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // El usuario no está autenticado, redirige a la página de inicio de sesión
+                window.location.href = "login.html";
+            }
+        });
+        
+    </script>
+</body>
+</html>

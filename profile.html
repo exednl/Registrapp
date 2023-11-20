@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/profile.css">
+    <title>Perfil de Usuario</title>
+</head>
+<body>
+    <div class="profile">
+        <div>
+            <img src="img/pngegg.png" alt="Asignaturas">
+        </div>
+        <h2 class="profile__title">Perfil de Usuario</h2>
+        <div class="profile__container">
+            <div class="profile__group">
+                <label for="usuario" class="profile__label">Usuario:</label>
+                <span id="usuario" class="profile__data"></span>
+            </div>
+            <div class="profile__group">
+                <label for="email" class="profile__label">Email:</label>
+                <span id="email" class="profile__data"></span>
+            </div>
+            <div class="profile__group">
+                <label for="email_personal" class="profile__label">Email Personal:</label>
+                <span id="email_personal" class="profile__data"></span>
+            </div>
+            <div class="profile__group">
+                <label for="phone" class="profile__label">Teléfono Personal:</label>
+                <span id="phone" class="profile__data"></span>
+            </div>
+            <br>
+
+            <!-- Formulario de edición oculto -->
+            <div id="editProfileForm" class="profile__form" style="display: none;">
+                <label for="newUsuario">Nuevo Usuario:</label>
+                <input type="text" id="newUsuario">
+                <label for="newEmailPersonal">Nuevo Email Personal:</label>
+                <input type="email" id="newEmailPersonal">
+                <label for="newPhone">Nuevo Teléfono Personal:</label>
+                <input type="text" id="newPhone">
+                <br>
+                <button id="saveChanges" class="profile__save">Guardar Cambios</button>
+            </div>
+            <button id="editProfile" class="profile__edit">Editar Perfil</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB67XMBnKbUSZUz-2UKFOjW-hc36Cc7YpA",
+            authDomain: "registrapp-3ea1b.firebaseapp.com",
+            databaseURL: "https://registrapp-3ea1b-default-rtdb.firebaseio.com",
+            projectId: "registrapp-3ea1b",
+            storageBucket: "registrapp-3ea1b.appspot.com",
+            messagingSenderId: "924476188769",
+            appId: "1:924476188769:web:5b499bf3316d4188dbe220"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const database = getDatabase(app);
+
+        // Referencias a elementos del DOM
+        const usuarioElement = document.getElementById('usuario');
+        const emailElement = document.getElementById('email');
+        const emailPersonalElement = document.getElementById('email_personal');
+        const phoneElement = document.getElementById('phone');
+        const editProfileButton = document.getElementById('editProfile');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const newUsuarioInput = document.getElementById('newUsuario');
+        const newEmailPersonalInput = document.getElementById('newEmailPersonal');
+        const newPhoneInput = document.getElementById('newPhone');
+        const saveChangesButton = document.getElementById('saveChanges');
+
+        // Verificar si el usuario está autenticado
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Obtener datos del usuario desde la base de datos en tiempo real
+                const userRef = ref(database, 'users/' + user.uid);
+                onValue(userRef, (snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        usuarioElement.textContent = userData.usuario || '';
+                        emailElement.textContent = userData.email || '';
+                        emailPersonalElement.textContent = userData.email_personal || '';
+                        phoneElement.textContent = userData.phone || '';
+                    }
+                });
+            } else {
+                // El usuario no está autenticado, redirigir o manejar según tus necesidades
+                console.error('Usuario no autenticado.');
+                window.location.assign("login.html");
+            }
+        });
+
+        // Evento para el botón de editar perfil
+        editProfileButton.addEventListener('click', () => {
+            // Mostrar el formulario de edición
+            editProfileForm.style.display = 'block';
+        });
+
+        // Evento para el botón de guardar cambios
+        saveChangesButton.addEventListener('click', () => {
+            const newUsuario = newUsuarioInput.value;
+            const newEmailPersonal = newEmailPersonalInput.value;
+            const newPhone = newPhoneInput.value;
+
+            // Actualizar los datos en la base de datos
+            set(ref(database, 'users/' + auth.currentUser.uid), {
+                usuario: newUsuario || usuarioElement.textContent,
+                email: emailElement.textContent,
+                email_personal: newEmailPersonal || emailPersonalElement.textContent,
+                phone: newPhone || phoneElement.textContent
+            }).then(() => {
+                // Actualizar la interfaz con los nuevos datos
+                usuarioElement.textContent = newUsuario || '';
+                emailPersonalElement.textContent = newEmailPersonal || '';
+                phoneElement.textContent = newPhone || '';
+
+                // Ocultar el formulario de edición
+                editProfileForm.style.display = 'none';
+            }).catch((error) => {
+                console.error('Error al guardar cambios:', error.message);
+            });
+        });
+
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // El usuario no está autenticado, redirige a la página de inicio de sesión
+                window.location.href = "login.html";
+            }
+        });
+    </script>
+</body>
+</html>

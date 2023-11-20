@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/registro.css">
+    <title>Recuperar Contraseña</title>
+</head>
+<body>
+    <div>
+    <h1>Recuperar Contraseña</h1>
+        <form id="recovery-form">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" required>
+            <button type="button" id="recoverButton">Recuperar Contraseña</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB67XMBnKbUSZUz-2UKFOjW-hc36Cc7YpA",
+            authDomain: "registrapp-3ea1b.firebaseapp.com",
+            databaseURL: "https://registrapp-3ea1b-default-rtdb.firebaseio.com",
+            projectId: "registrapp-3ea1b",
+            storageBucket: "registrapp-3ea1b.appspot.com",
+            messagingSenderId: "924476188769",
+            appId: "1:924476188769:web:5b499bf3316d4188dbe220"
+        };
+
+        // Inicializa Firebase
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+
+        document.getElementById('recoverButton').addEventListener('click', () => {
+            sendResetEmail();
+        });
+
+        function sendResetEmail() {
+            var email = document.getElementById('email').value;
+            sendPasswordResetEmail(auth, email)
+                .then(function () {
+                    alert('Se ha enviado un correo electrónico con instrucciones para restablecer la contraseña.');
+                })
+                .catch(function (error) {
+                    console.error(error.message);
+                    alert('Error al enviar el correo electrónico de recuperación de contraseña.');
+                });
+        }
+    </script>
+</body>
+</html>

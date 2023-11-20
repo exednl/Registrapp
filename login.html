@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Login Docente</title>
+</head>
+<body>
+    <div class="form">
+        <div>
+            <img src="img/iconRegistApp.png" alt="Icono de la aplicación">
+        </div>
+        <h2 class="form__title">Inicia Sesión</h2>
+        <p class="form__paragraph">¿Aún no tienes una cuenta? <a href="registro.html" class="form__link">Entra Aquí</a></p>
+
+        <div class="form__container">
+            <div class="form__group">
+                <input type="email" id="email" class="form__input" placeholder=" " required autocomplete="off">
+                <label for="email" class="form__label">Email:</label>
+                <span class="form__line"></span>
+            </div>  
+            <div class="form__group">
+                <input type="password" id="password" class="form__input" placeholder=" " required>
+                <label for="password" class="form__label">Contraseña:</label>
+                <span class="form__line"></span>
+            </div>  
+            <button id="logIn" class="form__submit">Iniciar Sesión</button>
+            <p class="form__paragraph">¿Olvidaste tu contraseña? <a href="recuperar.html" class="form__link">Entra Aquí</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB67XMBnKbUSZUz-2UKFOjW-hc36Cc7YpA",
+            authDomain: "registrapp-3ea1b.firebaseapp.com",
+            databaseURL: "https://registrapp-3ea1b-default-rtdb.firebaseio.com",
+            projectId: "registrapp-3ea1b",
+            storageBucket: "registrapp-3ea1b.appspot.com",
+            messagingSenderId: "924476188769",
+            appId: "1:924476188769:web:5b499bf3316d4188dbe220"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        const logInButton = document.getElementById('logIn');
+
+        logInButton.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Actualizar la última vez que inició sesión
+                const dt = new Date();
+                update(ref(database, 'users/' + user.uid), {
+                    last_login: email,
+                });
+
+                alert('Usuario Logeado!');
+                window.location.assign("perfil.html");
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(errorMessage);
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuario ha iniciado sesión
+                const uid = user.uid;
+                // ...
+            } else {
+                // Usuario ha cerrado sesión
+                // ...
+            }
+        });
+    </script>
+</body>
+</html>

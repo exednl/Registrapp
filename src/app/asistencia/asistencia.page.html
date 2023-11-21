@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="danger" [routerLink]="['/inicio']" expand="block">Cerrar Sesion</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button color="success" [routerLink]="['/feriados']">Feriados</ion-button><ion-icon name="calendar-number-outline"></ion-icon>
+    </ion-buttons>
+    <ion-button color="secondary" [routerLink]="['/perfi-usuario']" expand="block">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      Perfil de usuario
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-img class="tick"
+    src="assets/img/tick.png">
+  </ion-img>
+  <ion-title>Asistencia registrada </ion-title>
+
+
+
+</ion-content>

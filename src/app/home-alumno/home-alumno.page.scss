@@ -1,0 +1,21 @@
+.qrUser {
+
+    border-style: groove;
+
+  }
+
+
+.Logout{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-content {
+  ion-title {
+    color: white; // Color del título
+    text-align: center; // Centra el texto
+    font-family: 'Nunito', sans-serif; // Cambia la fuente del título
+    font-size: 1.5em; // Tamaño de la fuente del título
+  }
+}

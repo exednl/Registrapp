@@ -1,0 +1,40 @@
+ion-toolbar {
+  --opacity: 0.5;
+}
+
+/* iOS places the subtitle above the title */
+ion-card-header.ios {
+  display: flex;
+  flex-flow: column-reverse;
+  width: 50%;
+  align-self: center;
+}
+
+img {
+  margin: auto;
+  width: 50%;
+  display: block;
+  align-self: center;
+}
+
+ion-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+ion-card-content {
+  color: rgb(244, 255, 93);
+}
+
+ion-item-divider {
+  --background: #19422d;
+  --color: #fff;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+h1 {
+  text-align: center;
+}/*# sourceMappingURL=about.page.css.map */

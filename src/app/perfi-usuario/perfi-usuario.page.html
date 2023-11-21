@@ -1,0 +1,54 @@
+<!-- perfil-usuario.page.html -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Perfil de Usuario
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button color="success" [routerLink]="['/home-alumno']">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-img class="icon"
+      src="assets/img/studiante.png.png">
+  </ion-img>
+  <ion-card *ngIf="userData">
+    <ion-card-content>
+      <ion-label>Nombre: {{ userData.nombre }}</ion-label>
+      <ion-label>Email Personal: {{ userData.emailPersonal }}</ion-label>
+      <ion-label>Teléfono: {{ userData.telefono }}</ion-label>
+
+      <!-- Botón para abrir el formulario de edición -->
+      <ion-button expand="full" color="primary" (click)="openEditForm()">Editar Perfil</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Formulario de edición (inicialmente oculto) -->
+  <ion-card *ngIf="showEditForm">
+    <ion-card-content>
+      <ion-label>Editar Perfil</ion-label>
+
+      <ion-item>
+        <ion-label position="floating">Nuevo Nombre</ion-label>
+        <ion-input [(ngModel)]="newUserData.nombre" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nuevo Email Personal</ion-label>
+        <ion-input [(ngModel)]="newUserData.emailPersonal" type="email" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nuevo Teléfono</ion-label>
+        <ion-input [(ngModel)]="newUserData.telefono" type="tel" required></ion-input>
+      </ion-item>
+
+      <!-- Botón para guardar los cambios -->
+      <ion-button expand="full" color="success" (click)="saveChanges()">Guardar Cambios</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

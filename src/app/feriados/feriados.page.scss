@@ -1,0 +1,42 @@
+ion-card-header {
+    display: flex;
+    flex-flow: column-reverse;
+    background-color: rgb(14, 1, 8);
+    opacity: 0.9;
+    align-self: center;
+    border-radius:20px ;
+    
+    
+  }
+  img{
+    margin: auto;
+    width: 50%;
+    display: block;
+    align-self: center;
+
+}
+
+  ion-card{
+    width: 100%;
+    background: rgba(255,255,255,0.3);
+
+}
+
+ion-card-content{
+    color: rgb(244, 255, 93);
+    font-size: 18px;
+    background-color: rgb(87, 143, 124);
+    border-radius:50px ;
+
+}
+
+ion-card-subtitle{
+    color: yellowgreen;
+}
+
+
+
+h1{
+    text-align: center;
+}
+

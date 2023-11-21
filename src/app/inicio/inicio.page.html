@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Log In | Alumno</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-img class="icon" src="assets/img/iconRegistApp.png"></ion-img>
+  <ion-img class="iconuser" src="assets/img/iconuser.png"></ion-img>
+
+  <form [formGroup]="FormLogIn" (ngSubmit)="login()">
+    <ion-item button detail lines="full">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email" required></ion-input>
+    </ion-item>
+    <div *ngIf="FormLogIn.get('email').hasError('required') && FormLogIn.get('email').touched">
+      <p class="error-message">El email es obligatorio</p>
+    </div>
+    <div *ngIf="FormLogIn.get('email').hasError('email') && FormLogIn.get('email').touched">
+      <p class="error-message">Ingresa un email válido</p>
+    </div>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" placeholder="******" formControlName="password" required></ion-input>
+    </ion-item>
+    <div *ngIf="FormLogIn.get('password').hasError('required') && FormLogIn.get('password').touched">
+      <p class="error-message">La contraseña es obligatoria</p>
+    </div>
+
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" shape="round" button detail expand="block" [disabled]="!FormLogIn.valid">Iniciar sesión</ion-button>
+        <br>
+        <a id="olv" [routerLink]="['/restablecer-pass']" class="small-text">¿Olvidaste la contraseña?</a>&nbsp;
+        &nbsp;
+        &nbsp;
+        <a id="olv" [routerLink]="['/registro-usuario']" class="small-text">¿No tienes una cuenta?</a>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

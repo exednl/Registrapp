@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+    </ion-buttons>
+    <ion-title>Asignaturas </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item routerLink="/programacion" detail>
+      <ion-label>
+        Programacion | CSY4111
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="/arquitectura" detail>
+      <ion-label>
+        Arquitectura | ASY4131
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="/basededatos" detail>
+      <ion-label>
+        Base de Datos | PGY4121
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <div class="Logout">
+    <ion-button color="danger" [routerLink]="['/login-docente']" expand="block">Cerrar Sesion</ion-button>
+  </div>  
+ 
+</ion-content>

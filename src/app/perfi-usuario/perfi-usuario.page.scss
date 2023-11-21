@@ -1,0 +1,39 @@
+// perfil-usuario.page.scss
+
+ion-header {
+  ion-toolbar {
+    --background: #3880ff;
+    color: #fff;
+
+    ion-title {
+      text-align: center; // Centra horizontalmente el título
+      margin: 0 auto; // Alinea el título al centro
+    }
+  }
+}
+
+ion-content {
+  .image-container {
+    text-align: center;
+    margin-top: 50%;
+  }
+
+  ion-img.icon {
+    max-width: 50%;
+    margin: auto;
+    display: block;
+  }
+
+  ion-card {
+    margin: 20px;
+
+    ion-card-content {
+      ion-label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+}

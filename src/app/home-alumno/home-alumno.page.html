@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="danger" [routerLink]="['/inicio']" expand="block">Cerrar Sesión</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button color="success" [routerLink]="['/feriados']">
+        <ion-icon name="calendar-number-outline"></ion-icon>
+        Feriados
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button color="secondary" [routerLink]="['/perfi-usuario']" expand="block">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        Perfil de usuario
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-title>Escanea el código QR</ion-title>
+  <ion-button (click)="scanCode()" expand="block">Ingresar</ion-button>
+
+  <div *ngIf="code">
+    <h2>Código escaneado:</h2>
+    <p>{{ code }}</p>
+  </div>
+</ion-content>

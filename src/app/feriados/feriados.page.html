@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="secondary" [routerLink]="['/home-alumno']" expand="block">Volver</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+
+
+<ion-content [fullscreen]="true">
+  
+  <ion-grid fixed>
+    <ion-row>
+
+      <ion-card >
+        <img src="/assets/img/feriado.svg" > </ion-card>
+
+      <h1>Aquí podrás ver los días feriados de este año, días en los cuales no se registrará la asistencia. </h1>
+      <br>
+      <ion-col size="6" size-md="4" *ngFor ="let feriado of feriados" >
+        <ion-card-header>
+          <ion-card-subtitle>{{feriado.date}}</ion-card-subtitle>
+          <ion-card-title>{{feriado.title}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          
+          {{feriado.extra}}
+        
+        </ion-card-content>
+          
+
+
+
+
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
